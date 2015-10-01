@@ -50,4 +50,49 @@ let rec computed_fixed_point eq f x =
   if eq (f x) x then x
   else computed_fixed_point eq f (f x);;
 
+(* PROBLEM 6: COMPUTED PERIODIC POINT *)
+
+(* returns the value of the next period *)
+let rec next_period f p  x =
+  if p = 0 then x
+  else
+    next_period f (p - 1) (f x);;
+
+(* returns the computed periodic point *)
+let rec computed_periodic_point eq f p x =
+  if eq x (next_period f p x)
+  then x
+  else computed_periodic_point eq f p (f x);;
+
+(* PROBLEM 7: FILTER BLIND ALLEYS *)
+
+fst, snd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
