@@ -6,10 +6,10 @@ let rec isElement element set = match set with
   |first::rest -> if (first = element) then true
                   else isElement element rest;;
 
-(* Subset - returns true if b is a subset of a, otherwise returns false  *)
-let rec subset a b = match b with
+(* Subset - returns true if a is a subset of b, otherwise returns false  *)
+let rec subset a b = match a with
 	| [] -> true (* empty set is always a subset *)
-	| first::rest -> if isElement first a then subset a rest 
+	| first::rest -> if isElement first b then subset rest b 
                    else false;;
   
 (* PROBLEM 2: EQUAL SETS*)
@@ -67,8 +67,9 @@ let rec computed_periodic_point eq f p x =
 (* PROBLEM 7: FILTER BLIND ALLEYS *)
 
 (* First go through the rules and identify terminal rules, save
-those symbols in a list, then on the second go through of the rules,
-use the list to determine what new rules are also non blind alley rules *)
+those symbols in a list, then recursively go through the rules,
+using the terminal rules to determine what new rules are also non blind alley rules
+I use computed fixed points to determine when we've found all the non-blind-alley rules *)
 
 type ('nonterminal, 'terminal) symbol =
   |T of 'terminal
@@ -86,11 +87,11 @@ let is_symbol_terminal symbol terminal_rules = match terminal_rules with
                 else false;;
 
 (* Checks to see if the rule is already in the list*)
-let rec is_already_in_list first terminal_rules = match terminal_rules with
-  |[] -> false
-  |a::b ->  if a = first then true
+let rec not_in_list first terminal_rules = match terminal_rules with
+  |[] -> true
+  |a::b ->  if (a = first) then false
             else 
-              is_already_in_list first b;; 
+              not_in_list first b;; 
 
 (* Checks to see if the rhs is terminal, first check if the rule is T, if not check the symbols
   to see if they can be substitued into terminals*)
@@ -101,29 +102,15 @@ let rec is_rhs_terminal rhs terminal_rules = match rhs with
                     |N symbol ->  if List.exists (is_symbol_terminal symbol) terminal_rules
                                     then is_rhs_terminal rest terminal_rules
                                   else false;;
+
 (* returns a list of terminal rules using helper functions*)
 let rec get_terminal_rules rules terminal_rules = match rules with
   |[] -> terminal_rules
   |first::rest -> match first with
-                  |_ , rhs -> if (is_rhs_terminal rhs terminal_rules) && not (List.exists (is_already_in_list first) terminal_rules) 
+                  |_ , rhs -> if (is_rhs_terminal rhs terminal_rules) && (not_in_list first terminal_rules)
                                 then first::(get_terminal_rules rest terminal_rules)
                               else get_terminal_rules rest terminal_rules;;
 
 (* returns the list of non-blind-alley rules*)
 let filter_blind_alleys g = match g with
   | start_symbol, rules -> (start_symbol, reorder (computed_fixed_point equal_sets (get_terminal_rules rules) []) rules []);;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

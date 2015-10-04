@@ -1,0 +1,52 @@
+After-action report for HW 1
+
+I found that the hardest part of this lab was getting used to oCaml and 
+functional programming. Below I will detail how I approached the subquestions
+ and the challenges I faced.
+
+For SUBSET, I found it easiest to use "match" on "a" to recursively extract the
+"first" and "rest" of the array, then I made a helper function that compares 
+"first" with all the elements in "b" to determine is "a" is a subset of "b"
+
+For EQUAL SETS, I realized that I could leverage the subset function I made
+earlier. With two sets "a" and "b", they are equal sets if "a" is a subset of 
+"b" and "b" is also a subset of "a".
+
+For SET UNION, the spec says that repeating elements are OK. Therefore I took
+a very simple approach where the set union of "a" and "b" is simply appending
+all of "b" to "a"
+
+For SET INTERSECTION, I leverage the helper function I made for problem 1,
+I find the elements that belong to both sets "a" and "b" and return them.
+
+For SET DIFF, this is pretty much the opposite of Set Intersection.
+
+For COMPUTED FIXED POINT, I bumped into some troubles with this function.
+I was confused on how to use "eq", now I realize in oCaml everything is a func
+therefore I have to treat "eq" like a function that takes in params as well.
+
+For COMPUTED PERIODIC POINT, I made a helper function that evaluates the value
+of the next period.
+
+For FILTER BLIND ALLEYS, this was a difficult problem because of functional
+programming and oCaml. The logic and algorithm of my solution follows the
+logic and algorithm of a potential solution that we discussed in TA discussion
+as well as TA office hours. My algorithm works as follows:
+First go through the rules and identify terminal rules, save
+those symbols in a list.
+Then recursively go through the rules,
+using the terminal rules to determine what new rules are also non blind alley rules.
+Use computed fixed points with equal sets as the predicate to determine when
+the set of non-blind alley rules stop changing with each recursive call.
+When we have found the computed fixed point, we know that we have removed
+all of the blind alley rules.
+The hardest part of this problem was definitely dealing with oCaml 
+and functional programming. A lot of times I would make a function
+expecting it to work fine, but oCaml then tells me that there's an error
+because the types don't match. The way I dealt with this problem is as follows:
+Because I know that I will use Computed Fixed Point to determine when to stop
+the recursion, and I know that I had to make a function "get_terminal_rules"
+that returns the list of "good" rules and the structure of this list.
+Next, the most challenging part was to create my functions and helper functions
+so that their return types matched each other. A lot of the debugging involved
+fiddling around with parenthesis and recursion to get the correct return type.
