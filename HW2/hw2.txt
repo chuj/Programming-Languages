@@ -1,0 +1,16 @@
+The appraoch I took to solve this problem was inspired by the TA's discussion
+and office hours. I found that using or matchers and and matchers lead to 
+very good looking logic and code.
+The hardest part of this homework assignment was understanding what we were 
+supposed to do. To be honest I felt like the specs of this homework assignment
+was often vague, and I needed to go to TA discussions and office hours and ask
+the TAs to clearly explain what the question was often asking.
+My logic to solving the parse_prefix problem is as follows: first you start 
+with the start symbol, and you use the or matcher to go through the list of
+alternative rules. With each rule you choose, use an and matcher to make sure
+that all of the components of that rule has been verified before bubbling the
+result back up.
+When creating my own grammar, I found that even though the small english grammar
+I created made sense in my head, there were still ways to make very awkward 
+sounding, albeit correct, english sentences. A weakness of my algorithm is that
+it doesn't account for what sounds "right" or "wrong" in english.
