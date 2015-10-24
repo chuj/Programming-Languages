@@ -1,33 +1,46 @@
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 
 class BetterSafe implements State {
-    private byte[] value;
+    private AtomicIntegerArray value;
     private byte maxval;
-    private final ReentrantLock lock = new ReentrantLock();
 
     BetterSafe(byte[] v) { 
-        value = v;
+        int[] int_vals = new int[v.length];
+        for (int i = 0; i < v.length; i++){
+            int_vals[i] = v[i];
+        }
+        value = new AtomicIntegerArray(int_vals);
         maxval = 127; 
     }
 
     BetterSafe(byte[] v, byte m) {
-        value = v;
-        maxval = m;
+        int[] int_vals = new int[v.length];
+        for (int i = 0; i < v.length; i++){
+            int_vals[i] = v[i];
+        }
+        value = new AtomicIntegerArray(int_vals);
+        maxval = m; 
     }
 
-    public int size() { return value.length; }
+    public int size() { return value.length(); }
 
-    public byte[] current() { return value; }
+    public byte[] current() {
+        byte[] curr = new byte[value.length()]; 
+        for (int i = 0; i < value.length(); i++){
+            curr[i] = (byte) value.get(i);
+        }
+        return curr;
+    }
 
     public boolean swap(int i, int j) {
-	if (value[i] <= 0 || value[j] >= maxval) {
-	    return false;
-	}
-
-    lock.lock();
-	value[i]--;
-	value[j]++;
-    lock.unlock();
-	return true;
+    if (value.get(i) <= 0 || value.get(j) >= maxval) {
+        return false;
+    }
+    
+    value.decrementAndGet(i);
+    value.incrementAndGet(i);
+    
+    return true;
     }
 }
+
