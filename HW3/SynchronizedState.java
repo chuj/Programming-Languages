@@ -19,5 +19,3 @@ class SynchronizedState implements State {
 	return true;
     }
 }
-
-// for betterSafe, make the obj[i] synchronized but not the whole function
