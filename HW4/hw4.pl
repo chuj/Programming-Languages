@@ -8,13 +8,21 @@ kenken(N, C, T) :-
   length(T, N),
   % additionally, each list in T must also be length N
   maplist(getlength(N) , T),
+  % Constraints must be met
+  maplist(matcher_constraint(T) , C)
   % no numbers can be repeated in row or columns
   maplist(fd_all_different, T),
-  % constraints have to be met
-  
+  % transpose T, call transposed matrix X
+  transpose(T, X),
+  % no numbers can be repeated in row or columns
+  maplist(fd_all_different, X),
 
   .
   
+%helper goal for matching constraints
+matcher_constraint(T, Constraint) :-
+  
+  .
 
 
 % helper goal for checking list length equals N
