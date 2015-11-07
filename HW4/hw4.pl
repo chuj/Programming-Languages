@@ -9,7 +9,7 @@ kenken(N, C, T) :-
   % additionally, each list in T must also be length N
   maplist(getlength(N) , T),
   % Constraints must be met
-  maplist(matcher_constraint(T) , C)
+  maplist(iterate_constraints(T) , C)
   % no numbers can be repeated in row or columns
   maplist(fd_all_different, T),
   % transpose T, call transposed matrix X
@@ -20,19 +20,34 @@ kenken(N, C, T) :-
   .
   
 %helper goal for matching constraints
-matcher_constraint(T, Constraint) :-
-  
-  .
+iterate_constraints(T, Constraint) :- match_constraint(T, Constraint).
+%match the constraint with the following forms:
+match_constraint(T, +(S, L)) :- addition( L, 0, S, T) .
+match_constraint(T, *(P, L)) :- multiplication(L, 1, P, T).
+match_constraint(T, -(D, J, K)) :- subtraction().
+match_constraint(T, /(Q, J, K)) :- division().
+
 
 
 % helper goal for checking list length equals N
 getlength(N, List) :-  length(List, N). 
 
 % Addition rules
-%add [] to A gives you A
-addition([], A, A, T).
-%
-addition([First|Rest], A, , T) :- .
+% Base Case: add [] to S gives you S
+addition([], S, S, _).
+% Recursive addition
+addition([First|Rest], RunningSum , S , T) :- 
+  getElement(First, V, T), 
+  NewRunSum #= RunningSum + V,
+  addition(Rest, NewRunSum, S, T)
+.
+
+%Helper goal to get element value in matrix
+getElement(Row-Col, V, T) :-
+  nth( Row, T, T_row),
+  nth( Col, T_row, V)  
+.
+
 
 % Subtraction rules
 subtraction([], S, S).
