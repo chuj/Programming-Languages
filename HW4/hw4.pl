@@ -25,7 +25,7 @@ iterate_constraints(T, Constraint) :- match_constraint(T, Constraint).
 match_constraint(T, +(S, L)) :- addition( L, 0, S, T) .
 match_constraint(T, *(P, L)) :- multiplication(L, 1, P, T).
 match_constraint(T, -(D, J, K)) :- subtraction(D, J, K, T).
-match_constraint(T, /(Q, J, K)) :- division().
+match_constraint(T, /(Q, J, K)) :- division(Q, J, K, T).
 
 
 
@@ -48,7 +48,6 @@ getElement(Row-Col, V, T) :-
   nth( Col, T_row, V)  
 .
 
-
 % Subtraction rules
 subtraction(D, J, K, _, D_result).
 %Recursive Subtraction - case j - k
@@ -66,9 +65,6 @@ subtraction(D, J, K, T) :-
   subtraction(D, J, K, T, D_result) 
 .
 
-
-
-
 % Multiplication rules
 multiplication([], P, P, _).
 % Recursive multiplication
@@ -79,7 +75,22 @@ multiplication([First | Rest], RunningProd, P, T) :-
 .
 
 % Division rules
-division().
+%Base case
+division(Q, J, K, _, Q).
+%Recursive Division case j / k
+division(Q, J, K, T, Q_result) :- 
+  getElement(J, J_val, T),
+  getElement(K, K_val, T),
+  Q_result #= J_val / K_val,
+  division(Q, J, K, T, Q_result)
+.
+%Recursive Division case k / j
+division(Q, J, K, T, Q_result) :- 
+  getElement(J, J_val, T),
+  getElement(K, K_val, T),
+  Q_result #= K_val / J_val,
+  division(Q, J, K, T, Q_result)
+.
 
 % Transposing a list of lists, from clpfd.pl module
 transpose([], []).
