@@ -53,7 +53,13 @@ getElement(Row-Col, V, T) :-
 subtraction([], S, S).
 
 % Multiplication rules
-multiplication().
+multiplication([], P, P, _).
+% Recursive multiplication
+multiplication([First | Rest], RunningProd, P, T) :-
+  getElement(First, V, T),
+  NewRunProd #= RunningProd * V,
+  multiplication(Rest, NewRunProd, P, T)
+.
 
 % Division rules
 division().
