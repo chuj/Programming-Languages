@@ -24,7 +24,7 @@ iterate_constraints(T, Constraint) :- match_constraint(T, Constraint).
 %match the constraint with the following forms:
 match_constraint(T, +(S, L)) :- addition( L, 0, S, T) .
 match_constraint(T, *(P, L)) :- multiplication(L, 1, P, T).
-match_constraint(T, -(D, J, K)) :- subtraction().
+match_constraint(T, -(D, J, K)) :- subtraction(D, J, K, T).
 match_constraint(T, /(Q, J, K)) :- division().
 
 
@@ -50,7 +50,24 @@ getElement(Row-Col, V, T) :-
 
 
 % Subtraction rules
-subtraction([], S, S).
+subtraction(D, J, K, _, D_result).
+%Recursive Subtraction - case j - k
+subtraction(D, J, K, T) :-
+  getElement(J, J_val, T),
+  getElement(K, K_val, T),
+  D_result #= J_val - K_val,
+  subtraction(D, J, K, T, D_result) 
+.
+%Recursive Subtraction - case k - j
+subtraction(D, J, K, T) :-
+  getElement(J, J_val, T),
+  getElement(K, K_val, T),
+  D_result #= K_val - J_val,
+  subtraction(D, J, K, T, D_result) 
+.
+
+
+
 
 % Multiplication rules
 multiplication([], P, P, _).
