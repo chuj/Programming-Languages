@@ -1,0 +1,9 @@
+My kenken predicate for KenKen_no_op would take in the same
+parameters as regular kenken. Except that the constraints in C
+will only include a list of squares within that constraint, but without a specific operation.
+What this API would have to do then, would be to not only iterate
+through all the numbers in the domain for the squares, but also
+to iterate through all the valid operations in each permutation of
+the numbers in the squares.
+The rest of the goals, such as additions, subtraction, etc. and 
+all of the helper goals will remain the same.
