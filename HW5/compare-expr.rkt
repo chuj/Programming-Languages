@@ -16,11 +16,16 @@
           '(not TCP)
         )
       ]
+      ; Empty List
+      ['() x]
       ; List
       [(list begin ...) 
-        (if (equal? (car x) (car y))
-          (cons (car x) (compare-expr (cdr x) (cdr y)))
-          #f
+        (if (equal? (length x) (length y))
+          (if (equal? (car x) (car y))
+            (cons (car x) (compare-expr (cdr x) (cdr y)))
+            (cons `(if TCP ,(car x) ,(car y)) (compare-expr (cdr x) (cdr y))  )
+          )
+          `(if TCP ,x ,y)
         )
       ]
       ; Literal
