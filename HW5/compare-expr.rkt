@@ -27,10 +27,17 @@
               (cdr x)
               `(if TCP ,x ,y)
             )
-            ; regular list
-            (if (equal? (car x) (car y))
-              (cons (car x) (compare-expr (cdr x) (cdr y)))
-              (cons `(if TCP ,(car x) ,(car y)) (compare-expr (cdr x) (cdr y))  )
+            ; nested list
+            (match (car x)
+              [(list first ...)
+                (cons (compare-expr (car x) (car y)) (compare-expr (cdr x) (cdr y)))
+              ]
+              [ _
+                (if (equal? (car x) (car y))
+                  (cons (car x) (compare-expr (cdr x) (cdr y)))
+                  (cons `(if TCP ,(car x) ,(car y)) (compare-expr (cdr x) (cdr y))  )
+                )
+              ]
             )
           )
           `(if TCP ,x ,y)
@@ -53,3 +60,4 @@
     )
   ) 
 )
+
