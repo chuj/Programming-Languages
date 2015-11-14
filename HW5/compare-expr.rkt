@@ -21,9 +21,17 @@
       ; List
       [(list begin ...) 
         (if (equal? (length x) (length y))
-          (if (equal? (car x) (car y))
-            (cons (car x) (compare-expr (cdr x) (cdr y)))
-            (cons `(if TCP ,(car x) ,(car y)) (compare-expr (cdr x) (cdr y))  )
+          ; double quotes
+          (if (equal? (car x) `quote)
+            (if (equal? (cdr x) (cdr y))
+              (cdr x)
+              `(if TCP ,x ,y)
+            )
+            ; regular list
+            (if (equal? (car x) (car y))
+              (cons (car x) (compare-expr (cdr x) (cdr y)))
+              (cons `(if TCP ,(car x) ,(car y)) (compare-expr (cdr x) (cdr y))  )
+            )
           )
           `(if TCP ,x ,y)
         )
@@ -42,7 +50,6 @@
           `(if TCP ,x ,y)
         )
       ]
-
     )
   ) 
 )
