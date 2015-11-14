@@ -27,8 +27,8 @@
               (cdr x)
               `(if TCP ,x ,y)
             )
-            ; nested list
             (match (car x)
+              ; nested list
               [(list first ...)
                 (cons (compare-expr (car x) (car y)) (compare-expr (cdr x) (cdr y)))
               ]
@@ -97,3 +97,16 @@
   ) 
 )
 
+
+; Part 2
+(define test-compare-expr 
+  (lambda (x y)
+    (if (equal? (eval x) (let ([TCP #t]) (compare-expr x y)))
+      (if (equal? (eval y) (let ([TCP #f]) (compare-expr x y)))
+        #t
+        #f
+      )
+      #f
+    )
+  )
+)
