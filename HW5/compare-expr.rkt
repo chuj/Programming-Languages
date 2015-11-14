@@ -32,12 +32,42 @@
               [(list first ...)
                 (cons (compare-expr (car x) (car y)) (compare-expr (cdr x) (cdr y)))
               ]
+              ; special if case
               ['if
                 (if (equal? (car x) (car y))
                   (cons (car x) (compare-expr (cdr x) (cdr y)))
                   `(if TCP ,x ,y)
                 )
               ]
+              ; lambda case
+              ['lambda
+                (if (equal? (cdr x) (cdr y))
+                  x
+                  `(if TCP ,x ,y)
+                )
+              ]
+              ; let case
+              ['let
+                (if (equal? (cdr x) (cdr y))
+                  x
+                  `(if TCP ,x ,y)
+                )
+              ]
+              ; false
+              [#f
+                (if (equal? (car x) (car y))
+                  x
+                  (cons '(not TCP) (compare-expr (cdr x) (cdr y)))
+                )
+              ]
+              ; true
+              [#t
+                (if (equal? (car x) (car y))
+                  x
+                  (cons '(not TCP) (compare-expr (cdr x) (cdr y)))
+                )
+              ]
+              ; general case
               [ _
                 (if (equal? (car x) (car y))
                   (cons (car x) (compare-expr (cdr x) (cdr y)))
