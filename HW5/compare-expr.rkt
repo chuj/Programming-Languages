@@ -32,6 +32,12 @@
               [(list first ...)
                 (cons (compare-expr (car x) (car y)) (compare-expr (cdr x) (cdr y)))
               ]
+              ['if
+                (if (equal? (car x) (car y))
+                  (cons (car x) (compare-expr (cdr x) (cdr y)))
+                  `(if TCP ,x ,y)
+                )
+              ]
               [ _
                 (if (equal? (car x) (car y))
                   (cons (car x) (compare-expr (cdr x) (cdr y)))
