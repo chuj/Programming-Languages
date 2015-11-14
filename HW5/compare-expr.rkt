@@ -114,7 +114,3 @@
 ; Part 3
 (define test-x '(+ 3 (let ((a 3) (b 4)) ((lambda (x y) (+ x y)) a b))))
 (define test-y '(+ 2 (let ((a 3) (c 4)) ((lambda (x y) (+ x y)) a c))))
-
-; ((lambda (x) x) 3) ((lambda (x) x) 3)
-
-; (let ([TCP #t]) (eval (compare-expr x y)))
